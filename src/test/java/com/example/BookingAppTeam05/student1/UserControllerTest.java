@@ -3,6 +3,7 @@ package com.example.BookingAppTeam05.student1;
 import com.example.BookingAppTeam05.dto.users.ClientDTO;
 import com.example.BookingAppTeam05.model.LoyaltyProgramEnum;
 import com.example.BookingAppTeam05.model.Place;
+import com.example.BookingAppTeam05.model.users.Client;
 import com.example.BookingAppTeam05.service.PlaceService;
 import com.example.BookingAppTeam05.service.users.RoleService;
 import com.example.BookingAppTeam05.service.users.UserService;
@@ -23,8 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -85,25 +85,25 @@ public class UserControllerTest {
 
     }
 
-//    @Test
-//    @Transactional
-//    @Rollback(true)
-//    @WithMockUser(roles={"CLIENT"})
-//    public void update() throws Exception {
-//        Client client = (Client) userService.findUserById(7L);
-//        ClientDTO clientDTO = new ClientDTO(client);
-//
-//        clientDTO.setFirstName("Jescie");
-//        clientDTO.setLastName("Peric");
-//        clientDTO.setPlace(placeService.getPlaceById(1L));
-//        clientDTO.setPenalties(0);
-//        clientDTO.setAddress("Neka nova adresa");
-//        clientDTO.setDateOfBirth(null);
-//
-//        String json = TestUtil.json(clientDTO);
-//        this.mockMvc.perform(put(URL_PREFIX+"/updateUser/"+7L).contentType(contentType).content(json)).
-//                andExpect(status().isOk());
-//    }
+    @Test
+    @Transactional
+    @Rollback(true)
+    @WithMockUser(roles={"CLIENT"})
+    public void update() throws Exception {
+        Client client = (Client) userService.findUserById(7L);
+        ClientDTO clientDTO = new ClientDTO(client);
+
+        clientDTO.setFirstName("Jescie");
+        clientDTO.setLastName("Peric");
+        clientDTO.setPlace(placeService.getPlaceById(1L));
+        clientDTO.setPenalties(0);
+        clientDTO.setAddress("Neka nova adresa");
+        clientDTO.setDateOfBirth(null);
+
+        String json = TestUtil.json(clientDTO);
+        this.mockMvc.perform(put(URL_PREFIX+"/updateUser/"+7L).contentType(contentType).content(json)).
+                andExpect(status().isOk());
+    }
 
     @Test
     @Transactional
