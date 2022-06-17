@@ -24,8 +24,7 @@ public class PictureService {
 
     public byte[] getPictureDataByName(String name) {
         try {
-            String path = new File("src/main/java/com/example/BookingAppTeam05/data/images/" + name)
-                    .getAbsolutePath();
+            String path = "../data/images/" + name;
             RandomAccessFile f = new RandomAccessFile(path, "r");
             byte[] bytes = new byte[(int) f.length()];
             f.read(bytes);
