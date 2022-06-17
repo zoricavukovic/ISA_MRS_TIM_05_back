@@ -97,7 +97,6 @@ public class RatingService {
         return this.ratingRepository.findById(id).orElse(null);
     }
 
-    @Transactional
     public void setRatingForPublicationAndNotifyOwner(RatingReviewDTO rating) {
         try {
             Rating r = findById(rating.getId());
@@ -154,6 +153,7 @@ public class RatingService {
         return retVal;
     }
 
+    @Transactional
     public void updateClientReviewForPublication(RatingReviewDTO rating) {
         Rating r = findById(rating.getId());
         if (r == null)

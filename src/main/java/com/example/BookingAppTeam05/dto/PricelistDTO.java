@@ -30,7 +30,6 @@ public class PricelistDTO {
     public void setFetchedProperties(Pricelist pricelist){
         for(AdditionalService ad:pricelist.getAdditionalServices())
             this.additionalServices.add(new NewAdditionalServiceDTO(ad));
-        // this.bookingEntity = pricelist.getBookingEntity();
     }
 
     public Long getId() {

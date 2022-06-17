@@ -175,23 +175,26 @@ public class UserService {
         String password = getHashedNewUserPassword(userDTO.getPassword());
         Role role = roleService.findByName(userDTO.getUserTypeValue());
         User u = null;
+        String emailStart = "bookingapp05mzr++";
         switch (userDTO.getUserTypeValue()) {
             case "ROLE_CLIENT":
-                u = new Client("bookingapp05mzr++" + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
+                u = new Client(emailStart + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
                         userDTO.getDateOfBirth(), userDTO.getPhoneNumber(), password, true, place, role, 0);
                 break;
             case "ROLE_COTTAGE_OWNER":
-                u = new CottageOwner("bookingapp05mzr++" + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
+                u = new CottageOwner(emailStart + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
                         userDTO.getDateOfBirth(), userDTO.getPhoneNumber(), password, true, place, role, userDTO.getReason());
 
                 break;
             case "ROLE_SHIP_OWNER":
-                u = new ShipOwner("bookingapp05mzr++" + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
+                u = new ShipOwner(emailStart + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
                         userDTO.getDateOfBirth(), userDTO.getPhoneNumber(), password, true, place, role, userDTO.isCaptain(), userDTO.getReason());
                 break;
             case "ROLE_INSTRUCTOR":
-                u = new Instructor("bookingapp05mzr++" + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
+                u = new Instructor(emailStart + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
                         userDTO.getDateOfBirth(), userDTO.getPhoneNumber(), password, true, place, role, userDTO.getReason());
+                break;
+            default:
                 break;
         }
         if (u == null)

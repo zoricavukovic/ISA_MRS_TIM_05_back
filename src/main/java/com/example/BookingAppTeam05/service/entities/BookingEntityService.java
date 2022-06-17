@@ -320,6 +320,8 @@ public class BookingEntityService {
                 case "instructor":
                     entity = (List<BookingEntity>) (List<?>) adventureService.findAll();
                     break;
+                default:
+                    break;
             }
             if (entity == null)
                 return null;

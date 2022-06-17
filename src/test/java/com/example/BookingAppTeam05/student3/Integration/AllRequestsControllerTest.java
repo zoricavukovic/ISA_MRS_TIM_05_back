@@ -44,7 +44,6 @@ public class AllRequestsControllerTest {
                 .andExpect(jsonPath("$.reservationReportsCounter").value(DB_COUNT_RESERVATION_REPORT_COUNTER))
                 .andExpect(jsonPath("$.clientRatingsCounter").value(DB_COUNT_CLIENT_RATING_COUNTER))
                 .andExpect(jsonPath("$.clientComplaintsCounter").value(DB_CLIENT_COMPLAINT_COUNTER))
-                .andExpect(jsonPath("$.deleteAccountRequests").value(DB_COUNT_DELETE_ACCOUNT_REQUESTS))
                 .andExpect(jsonPath("$.newAccountRequests").value(DB_COUNT_NEW_ACCOUNT_REQUESTS));
     }
 
