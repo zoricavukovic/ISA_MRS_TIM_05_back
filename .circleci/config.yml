@@ -1,17 +1,24 @@
 version: 2.1
 
 jobs:
-  build:
+  build-and-test:
     docker:
-      - image: 'circleci/openjdk:11-jdk'
+      - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
-          name: Analyze on SonarCloud
-          command: mvn verify sonar:sonar -Dsonar.projectKey=zoricavukovic_ISA_MRS_TIM_05_back
+          name: Build
+          command: mvn -B -DskipTests clean package
+      - run:
+          name: Test
+          command: mvn test
 
+orbs:
+  heroku: circleci/heroku@1.2.6
 workflows:
-  main:
+  heroku_deploy:
     jobs:
-      - build:
-          context: SonarCloud
+      - build-and-test
+      - heroku/deploy-via-git:
+          requires:
+            - build-and-test
