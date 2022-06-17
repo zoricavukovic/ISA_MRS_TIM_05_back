@@ -74,10 +74,11 @@ public class UserServiceTest {
         User userForUpdate = userRepositoryMock.findUserById(7L);
 
         UserDTO userDTO = new UserDTO(userForUpdate);
+        userDTO.setPlace(userForUpdate.getPlace());
         userDTO.setLastName("Janes");
         userService.updateUser(7L, userDTO);
         when(userRepositoryMock.save(userForUpdate)).thenReturn(userForUpdate);
-        
+
         assertThat(userForUpdate).isNotNull();
 
         userForUpdate = userRepositoryMock.findUserById(7L);
