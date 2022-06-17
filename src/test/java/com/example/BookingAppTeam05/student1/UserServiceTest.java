@@ -66,7 +66,7 @@ public class UserServiceTest {
     @Test
     @Transactional
     @Rollback(true)
-    void updateUser() {
+    public void updateUser() {
         Place place = placeService.getPlaceById(1L);
         Role role = roleService.findByName("ROLE_CLIENT");
         when(userRepositoryMock.findUserById(7L)).thenReturn(new Client("bookingapp05mzr++jescieMullins@gmail.com", "Jescie", "Mullins", "Ap #769-2030 Mauris. Rd.", LocalDate.of(1971,12,20), "034-33-356-88", "$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra", false, place,role, 0));
@@ -86,5 +86,4 @@ public class UserServiceTest {
 
         verifyNoMoreInteractions(userRepositoryMock);
     }
-
 }
