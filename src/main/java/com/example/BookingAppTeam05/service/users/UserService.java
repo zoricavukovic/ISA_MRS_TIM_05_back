@@ -30,6 +30,7 @@ import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -110,7 +111,7 @@ public class UserService {
         user.setDateOfBirth(userDTO.getDateOfBirth());
         user.setPhoneNumber(userDTO.getPhoneNumber());
 
-        if(userDTO.getVersion() != user.getVersion())
+        if(!Objects.equals(userDTO.getVersion(), user.getVersion()))
             throw new OptimisticLockException("Can't update user because it's already updated with new data, please refresh page.");
         if (userDTO.getPlace() == null)
             throw new ItemNotFoundException("Can't update user without set place");
