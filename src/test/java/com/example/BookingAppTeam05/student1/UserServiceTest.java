@@ -9,7 +9,7 @@ import com.example.BookingAppTeam05.model.users.User;
 import com.example.BookingAppTeam05.service.PlaceService;
 import com.example.BookingAppTeam05.service.users.*;
 import static org.junit.Assert.assertThat;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
