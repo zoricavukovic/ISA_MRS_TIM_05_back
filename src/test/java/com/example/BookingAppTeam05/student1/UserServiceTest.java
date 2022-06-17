@@ -42,8 +42,6 @@ public class UserServiceTest {
     @Mock
     private LoyaltyProgramService loyaltyProgramService;
 
-    private @Mock List<User> users;
-
     @InjectMocks
     private UserService userService;
 
@@ -65,30 +63,28 @@ public class UserServiceTest {
         verifyNoMoreInteractions(userRepositoryMock);
     }
 
-//    @Test
-//    @Transactional
-//    @Rollback(true)
-//    void updateUser() {
-//        Place place = placeService.getPlaceById(1L);
-//        Role role = roleService.findByName("ROLE_CLIENT");
-//        when(userRepositoryMock.findUserById(7L)).thenReturn(new Client("bookingapp05mzr++jescieMullins@gmail.com", "Jescie", "Mullins", "Ap #769-2030 Mauris. Rd.", LocalDate.of(1971,12,20), "034-33-356-88", "$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra", false, place,role, 0));
-//
-//        User userForUpdate = userRepositoryMock.findUserById(7L);
-//
-//        UserDTO userDTO = new UserDTO(userForUpdate);
-//        userDTO.setPlace(userForUpdate.getPlace());
-//        userDTO.setLastName("Janes");
-//        userService.updateUser(7L, userDTO);
-//
-//        assertThat(userForUpdate).isNotNull();
-//
-//        userForUpdate = userRepositoryMock.findUserById(7L);
-//        assertThat(userForUpdate.getFirstName()).isEqualTo("Jescie");
-//        assertThat(userForUpdate.getLastName()).isEqualTo("Janes");
-//
-//        verify(userRepositoryMock, times(4)).findUserById(7L);
-//        verify(userRepositoryMock,times(1)).save(userForUpdate);
-//        verifyNoMoreInteractions(userRepositoryMock);
-//    }
+    @Test
+    @Transactional
+    @Rollback(true)
+    void updateUser() {
+        Place place = placeService.getPlaceById(1L);
+        Role role = roleService.findByName("ROLE_CLIENT");
+        when(userRepositoryMock.findUserById(7L)).thenReturn(new Client("bookingapp05mzr++jescieMullins@gmail.com", "Jescie", "Mullins", "Ap #769-2030 Mauris. Rd.", LocalDate.of(1971,12,20), "034-33-356-88", "$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra", false, place,role, 0));
+
+        User userForUpdate = userRepositoryMock.findUserById(7L);
+
+        UserDTO userDTO = new UserDTO(userForUpdate);
+        userDTO.setPlace(userForUpdate.getPlace());
+        userDTO.setLastName("Janes");
+        userService.updateUser(7L, userDTO);
+
+        assertThat(userForUpdate).isNotNull();
+
+        userForUpdate = userRepositoryMock.findUserById(7L);
+        assertThat(userForUpdate.getFirstName()).isEqualTo("Jescie");
+        assertThat(userForUpdate.getLastName()).isEqualTo("Janes");
+
+        verifyNoMoreInteractions(userRepositoryMock);
+    }
 
 }
