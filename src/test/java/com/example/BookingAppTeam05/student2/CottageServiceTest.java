@@ -78,17 +78,6 @@ public class CottageServiceTest {
         verifyNoMoreInteractions(cottageRepositoryMock);
     }
 
-//    @Test
-//    public void getAllUsers() {
-//
-//        when(cottageRepositoryMock.getCottagesByOwnerId(1L)).thenReturn(cottages);
-//
-//        List<Cottage> cottages =  cottageService.getCottagesByOwnerId(1L);
-//
-//        //assertThat()
-//
-//
-//    }
 
     @Test
     @Transactional
