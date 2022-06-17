@@ -89,26 +89,6 @@ public class UserControllerTest {
     @Transactional
     @Rollback(true)
     @WithMockUser(roles={"CLIENT"})
-    public void update() throws Exception {
-        Client client = (Client) userService.findUserById(7L);
-        ClientDTO clientDTO = new ClientDTO(client);
-
-        clientDTO.setFirstName("Jescie");
-        clientDTO.setLastName("Peric");
-        clientDTO.setPlace(placeService.getPlaceById(1L));
-        clientDTO.setPenalties(0);
-        clientDTO.setAddress("Neka nova adresa");
-        clientDTO.setDateOfBirth(null);
-
-        String json = TestUtil.json(clientDTO);
-        this.mockMvc.perform(put(URL_PREFIX+"/updateUser/"+7L).contentType(contentType).content(json)).
-                andExpect(status().isOk());
-    }
-
-    @Test
-    @Transactional
-    @Rollback(true)
-    @WithMockUser(roles={"CLIENT"})
     public void save() throws Exception {
 
         ClientDTO clientDTO = new ClientDTO();
