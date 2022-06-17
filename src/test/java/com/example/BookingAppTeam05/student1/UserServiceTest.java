@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class UserServiceTest {
+public class UserServiceTest {
 
     @Mock
     private UserRepository userRepositoryMock;
@@ -45,7 +45,7 @@ class UserServiceTest {
     @Test
     @Transactional
     @Rollback(true)
-    void findUserById() {
+    public void findUserById() {
 
         when(userRepositoryMock.findUserById(7L)).thenReturn(new Client("bookingapp05mzr++jescieMullins@gmail.com", "Jescie", "Mullins", "Ap #769-2030 Mauris. Rd.", LocalDate.of(1971,12,20), "034-33-356-88", "$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra", false, new Place(),new Role(), 0));
 
