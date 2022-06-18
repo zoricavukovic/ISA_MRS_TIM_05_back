@@ -8,6 +8,8 @@ import com.example.BookingAppTeam05.repository.PictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -24,7 +26,9 @@ public class PictureService {
 
     public byte[] getPictureDataByName(String name) {
         try {
-            RandomAccessFile f = new RandomAccessFile("src/main/data/images/" + name, "r");
+            String folder = "./src/main/data/images/";
+            Path path = Paths.get(folder + name);
+            RandomAccessFile f = new RandomAccessFile(path.toString(), "r");
             byte[] bytes = new byte[(int) f.length()];
             f.read(bytes);
             f.close();
