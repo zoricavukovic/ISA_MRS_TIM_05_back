@@ -29,6 +29,7 @@ public class PictureController {
         return new ResponseEntity<>(pictureData, HttpStatus.OK);
     }
 
+
     @GetMapping(value="/entity/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getBase64ImagesForEntityId(@PathVariable Long id) {
         List<String> retVal = pictureService.getBase64ImagesForEntityId(id);

@@ -13,6 +13,7 @@ import com.example.BookingAppTeam05.exception.UnauthorisedException;
 import com.example.BookingAppTeam05.exception.database.EditItemException;
 import com.example.BookingAppTeam05.model.Pricelist;
 import com.example.BookingAppTeam05.model.Reservation;
+import com.example.BookingAppTeam05.model.UnavailableDate;
 import com.example.BookingAppTeam05.model.users.Client;
 import com.example.BookingAppTeam05.service.RatingService;
 import com.example.BookingAppTeam05.model.entities.*;
@@ -22,6 +23,7 @@ import com.example.BookingAppTeam05.service.*;
 import com.example.BookingAppTeam05.service.users.ClientService;
 import com.example.BookingAppTeam05.service.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -231,6 +233,11 @@ public class BookingEntityService {
         return entityDTO;
     }
 
+    private void addCaptainIfAvailable(ShipDTO shipDTO) {
+        List<Reservation> reservations = reservationService.findAllReservationsForEntityId(shipDTO.getId());
+
+    }
+
     public List<SearchedBookingEntityDTO> findTopRated(String type) {
         List<BookingEntity> entities;
         if(type.equals("cottage"))
@@ -263,6 +270,13 @@ public class BookingEntityService {
             if(unavailableHours.size() == 4)
                 unavailableDates.add(reservation.getStartDate());
         }
+        for(UnavailableDateDTO unavailableDate:entityDTO.getUnavailableDates()){
+            LocalDateTime date = unavailableDate.getStartDate();
+            while(date.isBefore(unavailableDate.getEndDate())){
+                unavailableDates.add(date);
+                date = date.plusDays(1);
+            }
+        }
 
         entityDTO.setAllUnavailableDates(unavailableDates);
 
@@ -281,12 +295,10 @@ public class BookingEntityService {
                 lastDates.add(reservation.getStartDate().plusDays(reservation.getNumOfDays()));
         }
         for(UnavailableDateDTO unavailableDate:entityDTO.getUnavailableDates()){
-            int days = 0;
             LocalDateTime date = unavailableDate.getStartDate();
             while(date.isBefore(unavailableDate.getEndDate())){
                 allUnavailableDates.add(date);
-                days++;
-                date = date.plusDays(days);
+                date = date.plusDays(1);
             }
         }
         Set<LocalDateTime> additionalDates = new HashSet<>();
@@ -299,6 +311,7 @@ public class BookingEntityService {
             }
             if(unDate.getHour() < 9){
                 LocalDateTime newDate = unDate.minusDays(1);
+                newDate = newDate.withHour(21);
                 additionalDates.add(newDate);
             }
         }
@@ -319,8 +332,6 @@ public class BookingEntityService {
                     break;
                 case "instructor":
                     entity = (List<BookingEntity>) (List<?>) adventureService.findAll();
-                    break;
-                default:
                     break;
             }
             if (entity == null)
@@ -406,7 +417,7 @@ public class BookingEntityService {
     }
 
     @Transactional
-    public void tryToLogicalDeleteBookingEntityAndReturnErrorCode(Long entityId, Long userId, String confirmPass) {
+    public void tryToLogicalDeleteBookingEntity(Long entityId, Long userId, String confirmPass) {
         try {
             BookingEntity bookingEntity = this.getEntityById(entityId);
             if (bookingEntity == null)
@@ -442,6 +453,7 @@ public class BookingEntityService {
     }
 
     public void save(BookingEntity bookingEntity) {
+
         bookingEntityRepository.save(bookingEntity);
     }
 
@@ -462,4 +474,21 @@ public class BookingEntityService {
     }
 
 
+    public boolean isDateRangeUnavailable(Long entityId, LocalDateTime startDate, LocalDateTime endDate) {
+        BookingEntity entity = bookingEntityRepository.getEntityWithUnavailableDatesById(entityId);
+        for (LocalDateTime date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
+            for (UnavailableDate unavailableDate : entity.getUnavailableDates()) {
+                if (date.isAfter(unavailableDate.getStartTime()) && date.isBefore(unavailableDate.getEndTime()))
+                    return true;
+                if (date.equals(unavailableDate.getStartTime()) || date.equals(unavailableDate.getEndTime()))
+                    return true;
+            }
+        }
+        return false;
+
+    }
+
+    public Long getOwnerIdOfEntityId(Long id) {
+        return shipService.getShipOwnerId(id);
+    }
 }

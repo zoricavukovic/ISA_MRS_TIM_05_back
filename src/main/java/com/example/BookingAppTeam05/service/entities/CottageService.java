@@ -18,6 +18,9 @@ import com.example.BookingAppTeam05.repository.entities.CottageRepository;
 import com.example.BookingAppTeam05.service.*;
 import com.example.BookingAppTeam05.service.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -141,6 +144,9 @@ public class CottageService {
         return cottage.orElse(null);
     }
 
+
+
+    @Transactional
     public void updateCottage(CottageDTO cottageDTO, Long id){
         try {
             if (reservationService.findAllActiveReservationsForEntityid(id).size() != 0)
@@ -213,6 +219,7 @@ public class CottageService {
         return cottage.getId().toString();
     }
 
+
     public Cottage save(Cottage cottage) {
         return cottageRepository.save(cottage);
     }
@@ -281,4 +288,6 @@ public class CottageService {
             if (!found) { rules.add(rule); }
         }
     }
+
+
 }

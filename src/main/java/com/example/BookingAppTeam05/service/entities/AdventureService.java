@@ -15,6 +15,9 @@ import com.example.BookingAppTeam05.repository.entities.AdventureRepository;
 import com.example.BookingAppTeam05.service.*;
 import com.example.BookingAppTeam05.service.users.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -79,6 +82,7 @@ public class AdventureService {
         adventureDTO.setInstructor(new InstructorDTO(adventure.getInstructor()));
         return adventureDTO;
     }
+
 
     public List<Adventure> findAll() { return this.adventureRepository.findAll(); }
 
@@ -165,6 +169,7 @@ public class AdventureService {
         adventure = adventureRepository.save(adventure);
         return adventure;
     }
+
 
     public Adventure editAdventureById(Long id, NewAdventureDTO newAdventureDTO, Place place) {
         Adventure existingAdventure = adventureRepository.getAdventureById(id);

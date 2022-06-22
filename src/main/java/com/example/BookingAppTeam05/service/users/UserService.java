@@ -119,7 +119,7 @@ public class UserService {
         if (place == null)
             throw new ItemNotFoundException("Can't find place.");
         user.setPlace(place);
-        if (userDTO.getUserType().toString().equals("ROLE_SHIP_OWNER")){
+        if (userDTO.getUserType().getName().equals("ROLE_SHIP_OWNER")){
             ((ShipOwner) user).setCaptain(userDTO.isCaptain());
         }
         userRepository.save(user);
@@ -176,26 +176,23 @@ public class UserService {
         String password = getHashedNewUserPassword(userDTO.getPassword());
         Role role = roleService.findByName(userDTO.getUserTypeValue());
         User u = null;
-        String emailStart = "bookingapp05mzr++";
         switch (userDTO.getUserTypeValue()) {
             case "ROLE_CLIENT":
-                u = new Client(emailStart + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
+                u = new Client("bookingapp05mzr++" + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
                         userDTO.getDateOfBirth(), userDTO.getPhoneNumber(), password, true, place, role, 0);
                 break;
             case "ROLE_COTTAGE_OWNER":
-                u = new CottageOwner(emailStart + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
+                u = new CottageOwner("bookingapp05mzr++" + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
                         userDTO.getDateOfBirth(), userDTO.getPhoneNumber(), password, true, place, role, userDTO.getReason());
 
                 break;
             case "ROLE_SHIP_OWNER":
-                u = new ShipOwner(emailStart + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
+                u = new ShipOwner("bookingapp05mzr++" + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
                         userDTO.getDateOfBirth(), userDTO.getPhoneNumber(), password, true, place, role, userDTO.isCaptain(), userDTO.getReason());
                 break;
             case "ROLE_INSTRUCTOR":
-                u = new Instructor(emailStart + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
+                u = new Instructor("bookingapp05mzr++" + userDTO.getEmail(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getAddress(),
                         userDTO.getDateOfBirth(), userDTO.getPhoneNumber(), password, true, place, role, userDTO.getReason());
-                break;
-            default:
                 break;
         }
         if (u == null)
@@ -310,6 +307,9 @@ public class UserService {
         if (userToDeleted == null)
             throw new ItemNotFoundException("Can't find user for deleting. User id: " + userId);
 
+        if (userToDeleted.isDeleted())
+            throw new ItemNotFoundException("Can't find user for deleting. User id: " + userId);
+
         if (userToDeleted.getRole().getName().equals("ROLE_ADMIN") || userToDeleted.getRole().getName().equals("ROLE_SUPER_ADMIN"))
             throw new DeleteItemException("Not allowed to delete other admins");
 
@@ -322,8 +322,10 @@ public class UserService {
         if (userToDeleted.getRole().getName().equals("ROLE_CLIENT")) {
             if (reservationService.getAllActiveOrFutureReservationsForClientId(userId).size() > 0)
                 throw new DeleteItemException("Can't delete client with id: " + userId + " because client has active or future reservations");
-            else
+            else {
                 userRepository.logicalDeleteUserById(userId);
+                return;
+            }
         }
 
         if (checkIfOwnerHaveActiveReservationsForOneOfHisEntities(userId))
