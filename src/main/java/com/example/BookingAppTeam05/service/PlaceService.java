@@ -39,7 +39,6 @@ public class PlaceService {
     public Place getPlaceByZipCode(String zipCode) {
         return placeRepository.getPlaceByZipCode(zipCode);  }
 
-    @Cacheable(value="places", key="'allPlaces'")
     public List<PlaceDTO> findAllPlaceDTO() {
         List<Place> places = findAll();
         List<PlaceDTO> placeDTOS = new ArrayList<>();

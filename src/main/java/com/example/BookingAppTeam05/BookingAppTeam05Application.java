@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableAsync
 @EnableScheduling
-@EnableCaching
 public class BookingAppTeam05Application {
 
 	public static void main(String[] args) {
